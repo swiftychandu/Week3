@@ -26,6 +26,7 @@ class SecondViewController: UIViewController {
         configureCollectionView()
         configureDatasource()
         getPhotos()
+        
     }
     
     func configureCollectionView() {

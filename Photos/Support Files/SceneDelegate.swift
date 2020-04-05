@@ -24,7 +24,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createTabBar() -> UITabBarController {
         let tableViewController = UITableViewController()
         let firstNC = UINavigationController(rootViewController: tableViewController)
+        firstNC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
         let secondNC = UINavigationController(rootViewController: SecondViewController())
+        secondNC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [firstNC, secondNC]
         return tabBarController
