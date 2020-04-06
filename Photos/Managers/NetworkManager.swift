@@ -10,7 +10,7 @@ import Foundation
 
 class NetworkManager {
     static let shared = NetworkManager()
-    let link = "https://jsonplaceholder.typicode.com/photos"
+    private let link = "https://jsonplaceholder.typicode.com/photos"
     
     private init() { }
     

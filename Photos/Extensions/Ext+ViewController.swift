@@ -39,3 +39,23 @@ extension SecondViewController {
         }
     }
 }
+
+extension UIViewController {
+    func showDetailVC(for item: String) {
+           let destinationVC = DetailViewController()
+           let navController = UINavigationController(rootViewController: destinationVC)
+           let cacheKey = NSString(string: item)
+          let image = CacheManager.shared.cache.object(forKey: cacheKey)
+           destinationVC.imageView.image = image
+           present(navController, animated: true)
+       }
+    
+    func presentAlertOnMainThread(title: String, message: String, buttonTitle: String) {
+        DispatchQueue.main.async {
+            let alertVC = AlertViewController(title: title, message: message, buttonTitle: buttonTitle)
+            alertVC.modalPresentationStyle = .overFullScreen
+            alertVC.modalTransitionStyle = .crossDissolve
+            self.present(alertVC, animated: true)            
+        }
+    }
+}

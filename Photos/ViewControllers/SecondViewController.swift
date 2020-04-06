@@ -10,30 +10,29 @@ import UIKit
 
 class SecondViewController: UIViewController {
     
-    enum Section {
-        case main
-    }
+    enum Section { case main }
     
     var collectionView: UICollectionView!
     var datasource: UICollectionViewDiffableDataSource<Section, Photo>!
-    
     var photosData: [Photo] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        navigationItem.title = "Photos"
+        navigationController?.navigationBar.prefersLargeTitles = true
         configureCollectionView()
         configureDatasource()
-        getPhotos()
-        
+        getPhotos()        
     }
     
     func configureCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createFlowLayout())
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createFlowLayout(in: view))
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         collectionView.backgroundColor = .systemBackground
+        collectionView.delegate = self
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: String(describing: PhotoCell.self))
         
         NSLayoutConstraint.activate([
@@ -44,30 +43,14 @@ class SecondViewController: UIViewController {
         ])
     }
     
-    func createFlowLayout() -> UICollectionViewFlowLayout {
-        let width = view.bounds.width
-        let padding: CGFloat = 12
-        let spacing: CGFloat = 10
-        let availableWidth = width - (2 * padding) - (2 * spacing)
-        let cellWidth = availableWidth / 3
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-        flowLayout.itemSize = CGSize(width: cellWidth, height: cellWidth + 40)
-        
-        return flowLayout
-    }
-    
     func getPhotos() {
-        showActivity()
         NetworkManager.shared.fetchPhotos { [weak self] photos in
             guard let self = self else { return }
-            self.dismissIndicator()
             switch photos {
             case .success(let photos):
                 self.photosData = photos
                 self.updateData()
-            case .failure(let error): print(error.rawValue)
+            case .failure(let error): self.presentAlertOnMainThread(title: "something went wrong", message: error.rawValue, buttonTitle: "Ok")
             }
         }
     }
@@ -89,4 +72,10 @@ class SecondViewController: UIViewController {
     
 }
 
+extension SecondViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = photosData[indexPath.item].url
+         showDetailVC(for: item)
+    }
+}
 

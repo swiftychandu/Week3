@@ -25,7 +25,6 @@ class PhotoCell: UICollectionViewCell {
     
     func set(photo: Photo) {
         photoImageView.downloadImage(from: photo.url)
-        print(photo.url)
         titleLabel.text = photo.title
     }
     
