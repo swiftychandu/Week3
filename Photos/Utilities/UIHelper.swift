@@ -10,7 +10,7 @@ import UIKit
 
 enum UIHelper {
    static func createFlowLayout(in view: UIView) -> UICollectionViewFlowLayout {
-        let width = view.bounds.width
+    let width = min(view.bounds.width, view.bounds.height)
         let padding: CGFloat = 12
         let spacing: CGFloat = 10
         let availableWidth = width - (2 * padding) - (2 * spacing)
